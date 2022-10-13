@@ -1,7 +1,8 @@
 require("dotenv").config()
 const express = require("express")
 const app = express()
-
+const connectDB = require('./Config/db')
+connectDB();
 //error handller middlware
 const {errorHandler} = require("./Middlewares/errorMiddleware")
 

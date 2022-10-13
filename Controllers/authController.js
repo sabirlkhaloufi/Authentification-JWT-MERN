@@ -4,9 +4,9 @@ const { Error } = require("mongoose")
 // url : api/auth/login
 // acces : Public
 const Login =  (req,res) => {
-    if(!req.body.email){
+    if(!req.body.email || !req.body.password){
         res.status(400)
-        throw new Error("please enter email")
+        throw new Error("please enter email or password")
     }
     res.status(200).send(req.body)
 }
@@ -16,7 +16,11 @@ const Login =  (req,res) => {
 // url : api/auth/Register
 // acces : Public
 const Register =  (req,res) => {
-    res.status(200).send('this a register function')
+    if(!req.body.email || !req.body.name || !req.body.password){
+        res.status(400)
+        throw new Error("please enter email or name or password")
+    }
+    res.status(200).send(req.body)
 }
 
 
@@ -24,7 +28,11 @@ const Register =  (req,res) => {
 // url : api/auth/ForgetPassword
 // acces : Public
 const ForgetPassword =  (req,res) => {
-    res.status(200).send('this a Forget Password function')
+    if(!req.body.email){
+        res.status(400)
+        throw new Error("please enter email")
+    }
+    res.status(200).send(req.body)
 }
 
 
