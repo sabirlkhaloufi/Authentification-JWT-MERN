@@ -1,4 +1,6 @@
-// const { Error } = require("mongoose")
+const { Error } = require("mongoose");
+const UserModel = require("../Models/UserModel")
+const asyncHandler = require('express-async-handler')
 
 // method : post
 // url : api/auth/login
@@ -8,21 +10,31 @@ const Login =  (req,res) => {
         res.status(400)
         throw new Error("please enter email or password")
     }
-    res.status(200).send(req.body)
+    res.status(200).json(req.body)
 }
 
 
 // method : post
 // url : api/auth/Register
 // acces : Public
-const Register =  (req,res) => {
+const Register =  asyncHandler(async(req,res) => {
     if(!req.body.email || !req.body.name || !req.body.password){
         res.status(400)
         throw new Error("please enter email or name or password")
     }
-    res.status(200).send(req.body)
-}
+    
+    try{
+        const data =  await UserModel.create({
+            name:req.body.name,
+            email:req.body.email,
+            password:req.body.password
+        });
+        res.status(200).send(data)
+    }catch(error){
+        throw new Error("user is exist")
+    }
 
+})
 
 // method : post
 // url : api/auth/ForgetPassword
