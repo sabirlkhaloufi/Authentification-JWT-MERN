@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-
 const {Login,Register,ForgetPassword,ResetPassword} = require('../Controllers/AuthController')
 
 router.post('/login',Login)

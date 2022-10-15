@@ -1,37 +1,76 @@
 const { Error } = require("mongoose");
+require("dotenv").config()
 const UserModel = require("../Models/UserModel")
+const RoleModel = require("../Models/RoleModel")
+const jwt = require("jsonwebtoken")
+const bcrypt = require("bcryptjs")
+
 const asyncHandler = require('express-async-handler')
 
 // method : post
 // url : api/auth/login
 // acces : Public
-const Login =  (req,res) => {
-    if(!req.body.email || !req.body.password){
+const Login =  asyncHandler(async(req,res) => {
+
+     if(!req.body.email || !req.body.password){
         res.status(400)
         throw new Error("please enter email or password")
     }
-    res.status(200).json(req.body)
-}
+
+    // check user by email
+    const user = await UserModel.findOne({email: req.body.email})
+
+    //check by email and compaer password with password hashed
+    if(user && (await bcrypt.compare(req.body.password,user.password))){
+        res.json({
+            token: generateToken(user._id)
+        })
+    }
+    else{
+        res.status(400)
+        throw new Error('invalid email or password')
+    }
+})
 
 
 // method : post
 // url : api/auth/Register
 // acces : Public
 const Register =  asyncHandler(async(req,res) => {
+    //check input if empty
     if(!req.body.email || !req.body.name || !req.body.password){
         res.status(400)
         throw new Error("please enter email or name or password")
     }
-    
+
+    // check if compte exist
+    const userExist = await UserModel.findOne({email: req.body.email})
+    if(userExist){
+        throw new Error("user is exist")
+    }
+
+    //check role id exist
+    const findRole = await RoleModel.findOne({role : req.body.role})
+    if(!findRole){
+        throw new Error("canot find this role")
+    }
+
+    //hash passsword
+    const salt = await bcrypt.genSalt(10)
+    const hashPassword = await bcrypt.hash(req.body.password,salt)
+
     try{
-        const data =  await UserModel.create({
+        const user =  await UserModel.create({
             name:req.body.name,
             email:req.body.email,
-            password:req.body.password
+            password:hashPassword,
+            role:findRole._id
         });
-        res.status(200).send(data)
+        res.json({
+            token: generateToken(user._id)
+        })
     }catch(error){
-        throw new Error("user is exist")
+        throw new Error(error)
     }
 
 })
@@ -56,6 +95,12 @@ const ResetPassword =  (req,res) => {
     res.status(200).send(token)
 }
 
+//generate token
+const generateToken = (id) => {
+    return jwt.sign({id}, process.env.JWT_SECRET,{
+        expiresIn: '30d'
+    })
+}
 
 module.exports = {
     Login,
