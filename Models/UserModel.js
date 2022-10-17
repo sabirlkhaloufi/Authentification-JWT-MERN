@@ -19,6 +19,9 @@ const UserScheme = mongoose.Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref:'roles',
     require: true
+  },
+  isVerified : {
+    type : Boolean
   }
 },
 {
