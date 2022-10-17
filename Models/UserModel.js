@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-/// model/User.js 
+/// model /User.js 
 const UserScheme = mongoose.Schema({
   name: {
     type: String,
@@ -22,6 +22,9 @@ const UserScheme = mongoose.Schema({
   },
   isVerified : {
     type : Boolean
+  },
+  emailToken : {
+    type : String
   }
 },
 {

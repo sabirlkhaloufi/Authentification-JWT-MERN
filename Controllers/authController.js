@@ -5,7 +5,7 @@ const RoleModel = require("../Models/RoleModel")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const asyncHandler = require('express-async-handler');
-const nodemailer = require("nodemailer")
+const nodemailer = require("nodemailer");
 
 // method : post
 // url : api/auth/login
@@ -65,9 +65,13 @@ const Register =  asyncHandler(async(req,res) => {
             email:req.body.email,
             password:hashPassword,
             role:findRole._id,
-            isVerified:false
+            isVerified:false,
+            emailToken:null
         });
-        user.token = await generateToken(user.id);
+
+        user.emailToken = await generateToken(user.id);
+        await UserModel.updateOne({ _id: user._id }, { $set: { emailToken: user.emailToken } })
+
         // localStorage.setItem("token",user.token)
         // await sendEmailVerify(user);
 
@@ -78,7 +82,7 @@ const Register =  asyncHandler(async(req,res) => {
             subject: 'codewithid -verify yur email',
             html : `<h2> ${user.name} thanks for register on our site</h2>
                     <h4>Please verify your email to contenue ....</h4>
-                    <a href="http://${req.headers.host}/api/auth/verify-email/${user.token}">Verify Your Email</a>`
+                    <a href="http://${req.headers.host}/api/auth/verify-email/${user.emailToken}">Verify Your Email</a>`
         }
         
         transporter.sendMail(mailOption, function(error, info){
@@ -120,9 +124,9 @@ const ResetPassword =  (req,res) => {
 // const verifyEmail = (req, res) => {}
 
 //generate token
-const generateToken = (id,name) => {
-    return jwt.sign({id,name}, process.env.JWT_SECRET,{
-        expiresIn: '5m'
+const generateToken = (id,name,role) => {
+    return jwt.sign({id,name, role}, process.env.JWT_SECRET,{
+        expiresIn: '10m'
     })
 }
 
@@ -165,9 +169,39 @@ const transporter = nodemailer.createTransport({
 // } 
 
 
+
+// method : get
+// url : api/auth/verify-email
+// acces : Public
+const verifyEmail = async(req,res) => {
+    //get token in route 
+    const token = req.params.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+    //get user by Id for compare tokenEmail with email in database
+    const user = await UserModel.findById(decoded.id).select('emailToken')
+    
+    if(user){
+        if(user.emailToken == token){
+            await UserModel.updateOne({ _id: user._id }, { $set: { isVerified: true } })
+            res.json({message : "email is verify"})
+        }
+        else{
+            res.json({message : "email not verify"})
+        } 
+    }else{
+        res.json({message : "email not verify"})
+    }
+    // let dateNow = new Date();
+    // console.log(decoded.exp < dateNow.getTime() - decoded.iat);
+    // console.log(user);
+}
+
+
 module.exports = {
     Login,
     Register,
     ForgetPassword,
-    ResetPassword
+    ResetPassword,
+    verifyEmail
 }
