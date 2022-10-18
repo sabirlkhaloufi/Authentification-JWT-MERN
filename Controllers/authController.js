@@ -1,11 +1,10 @@
-const { Error } = require("mongoose");
 require("dotenv").config()
 const UserModel = require("../Models/UserModel")
 const RoleModel = require("../Models/RoleModel")
 const jwt = require("jsonwebtoken")
-const bcrypt = require("bcryptjs")
 const asyncHandler = require('express-async-handler');
-const nodemailer = require("nodemailer");
+const {sendEmailForUser} = require('../Utils/sendMailRegister')
+
 
 // method : post
 // url : api/auth/login
@@ -49,51 +48,26 @@ const Register =  asyncHandler(async(req,res) => {
         throw new Error("user is exist")
     }
 
-    //check role id exist
+    //check role is exist and get RoleId
     const findRole = await RoleModel.findOne({role : req.body.role})
     if(!findRole){
         throw new Error("canot find this role")
     }
 
-    //hash passsword
-    const salt = await bcrypt.genSalt(10)
-    const hashPassword = await bcrypt.hash(req.body.password,salt)
-
     try{
         const user =  await UserModel.create({
             name:req.body.name,
             email:req.body.email,
-            password:hashPassword,
+            password:req.body.password,
             role:findRole._id,
             isVerified:false,
             emailToken:null
         });
 
         user.emailToken = await generateToken(user.id);
+
         await UserModel.updateOne({ _id: user._id }, { $set: { emailToken: user.emailToken } })
-
-        // localStorage.setItem("token",user.token)
-        // await sendEmailVerify(user);
-
-        //send email verification
-        mailOption =  {
-            from: '"verify your email " <<sabirkhalloufi@gmail.com>>',
-            to: user.email,
-            subject: 'codewithid -verify yur email',
-            html : `<h2> ${user.name} thanks for register on our site</h2>
-                    <h4>Please verify your email to contenue ....</h4>
-                    <a href="http://${req.headers.host}/api/auth/verify-email/${user.emailToken}">Verify Your Email</a>`
-        }
-        
-        transporter.sendMail(mailOption, function(error, info){
-            if(error){
-                throw new Error(error)
-            }
-            else{
-                res.json({message : "verification email is send to your email account"})
-            }
-        })
-        
+        sendEmailForUser(req,user,res);
 
     }catch(error){
         throw new Error(error)
@@ -123,50 +97,19 @@ const ResetPassword =  (req,res) => {
 
 // const verifyEmail = (req, res) => {}
 
-//generate token
-const generateToken = (id,name,role) => {
-    return jwt.sign({id,name, role}, process.env.JWT_SECRET,{
-        expiresIn: '10m'
+//generate token for send in email and login
+const generateToken = (id) => {
+    return jwt.sign({id}, process.env.JWT_SECRET,{
+        expiresIn: '1d'
     })
 }
 
-
-// generate transporter nodemailler for send email verification
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth : {
-        user : 'sabirkhaloufi@gmail.com',
-        pass : 'daemezuqtqswztlw',
-        
-    },
-    tls: {
-        rejectUnauthorized: false
-    }
-})
-
-
-
-// function for send email verification to email user 
-//parametre : user
-// const sendEmailVerify = async(req,user,res) =>{
-//     mailOption =  {
-//         from: '"verify your email " <<sabirkhalloufi@gmail.com>>',
-//         to: user.email,
-//         subject: 'codewithid -verify yur email',
-//         html : `<h2> ${user.name} thanks for register on our site</h2>
-//                 <h4>Please verify your email to contenue ....</h4>
-//                 <a href="http://${req.headers.host}/user/verify-email?token=${user.token}">Verify Your Email</a>`
-//     }
-    
-//     transporter.sendMail(mailOption, function(error, info){
-//         if(error){
-//             throw new Error(error)
-//         }
-//         else{
-//             res.json({message : "verification email is send to your email account"})
-//         }
-//     })
-// } 
+// generate token for reset password
+const generateTokenReset = (id) => {
+    return jwt.sign({id}, process.env.JWT_SECRET,{
+        expiresIn: '10m'
+    })
+}
 
 
 
@@ -180,7 +123,7 @@ const verifyEmail = async(req,res) => {
 
     //get user by Id for compare tokenEmail with email in database
     const user = await UserModel.findById(decoded.id).select('emailToken')
-    
+
     if(user){
         if(user.emailToken == token){
             await UserModel.updateOne({ _id: user._id }, { $set: { isVerified: true } })
