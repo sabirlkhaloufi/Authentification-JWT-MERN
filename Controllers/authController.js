@@ -3,12 +3,12 @@ const UserModel = require("../Models/UserModel")
 const RoleModel = require("../Models/RoleModel")
 const jwt = require("jsonwebtoken")
 const asyncHandler = require('express-async-handler');
-const {sendEmailForUser} = require('../Utils/sendMailRegister')
+const {sendEmailForUser, sendEmailForResetPass} = require('../Utils/sendMail')
 
 
 // method : post
-// url : api/auth/login
-// acces : Public
+// url    : api/auth/login
+// acces  : Public
 const Login =  asyncHandler(async(req,res) => {
 
      if(!req.body.email || !req.body.password){
@@ -33,9 +33,10 @@ const Login =  asyncHandler(async(req,res) => {
 
 
 // method : post
-// url : api/auth/Register
-// acces : Public
+// url    : api/auth/Register
+// acces  : Public
 const Register =  asyncHandler(async(req,res) => {
+
     //check input if empty
     if(!req.body.email || !req.body.name || !req.body.password){
         res.status(400)
@@ -47,7 +48,7 @@ const Register =  asyncHandler(async(req,res) => {
     if(userExist){
         throw new Error("user is exist")
     }
-
+    
     //check role is exist and get RoleId
     const findRole = await RoleModel.findOne({role : req.body.role})
     if(!findRole){
@@ -60,42 +61,75 @@ const Register =  asyncHandler(async(req,res) => {
             email:req.body.email,
             password:req.body.password,
             role:findRole._id,
-            isVerified:false,
             emailToken:null
         });
 
+        //generate token for send in database and email arg(id)
         user.emailToken = await generateToken(user.id);
-
+        
+        //insert token generate in database
         await UserModel.updateOne({ _id: user._id }, { $set: { emailToken: user.emailToken } })
+
+        //sendMail verification arg(dataUser);
         sendEmailForUser(req,user,res);
 
-    }catch(error){
+    } catch(error){
         throw new Error(error)
     }
 
 })
 
 // method : post
-// url : api/auth/ForgetPassword
-// acces : Public
-const ForgetPassword =  (req,res) => {
+// url    : api/auth/ForgetPassword
+// acces  : Public
+const ForgetPassword =  asyncHandler(async(req,res) => {
+
+    //check for empty value
     if(!req.body.email){
-        res.status(400)
-        throw new Error("please enter email")
+        throw new Error("please enter your email")
     }
-    res.status(200).send(req.body)
-}
+
+    // check this email is exist in database
+    const user = await UserModel.findOne({email: req.body.email})
+
+    if(user){
+        user.emailToken = generateTokenReset(user._id);
+        await UserModel.updateOne({_id: user._id }, { $set: { emailToken: user.emailToken } })
+        sendEmailForResetPass(req,user,res)
+    }
+    else{
+        throw new Error("this email not exist")  
+    }
+})
 
 
 // method : post
-// url : api/auth/ResetPassword
-// acces : Public
-const ResetPassword =  (req,res) => {
-    const token = req.params.token
-    res.status(200).send(token)
-}
+// url    : api/auth/ResetPassword
+// acces  : Public
+const ResetPassword = asyncHandler(async(req,res) => {
+     //get token in route 
+     const token = req.params.token;
+     const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-// const verifyEmail = (req, res) => {}
+     //get user by Id for compare tokenEmail with email in database
+     const user = await UserModel.findById(decoded.id).select('emailToken')
+ 
+     if(user){
+         if(user.emailToken == token){
+            //get new password in body
+            const newPassword = req.body.password;
+            await UserModel.updateOne({ _id: user._id }, { $set: { password: newPassword } })
+            res.json({message : "password is insert"})
+         }
+         else{
+             res.json({message : "password not reset verify"})
+         } 
+     }else{
+         res.json({message : "password not reset verify"})
+     }
+
+})
+
 
 //generate token for send in email and login
 const generateToken = (id) => {
@@ -113,10 +147,11 @@ const generateTokenReset = (id) => {
 
 
 
-// method : get
-// url : api/auth/verify-email
-// acces : Public
+// method  : get
+// url     : api/auth/verify-email
+// acces   : Public
 const verifyEmail = async(req,res) => {
+
     //get token in route 
     const token = req.params.token;
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
@@ -135,11 +170,7 @@ const verifyEmail = async(req,res) => {
     }else{
         res.json({message : "email not verify"})
     }
-    // let dateNow = new Date();
-    // console.log(decoded.exp < dateNow.getTime() - decoded.iat);
-    // console.log(user);
 }
-
 
 module.exports = {
     Login,
