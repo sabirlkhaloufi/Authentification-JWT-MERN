@@ -64,7 +64,6 @@ const Register =  asyncHandler(async(req,res) => {
 
     //hash password bcriptJs
     const passHash = await bcrypt.hash(req.body.password, 10)
-    console.log(passHash);
     try{
         const user =  await UserModel.create({
             name:req.body.name,
@@ -125,9 +124,10 @@ const ResetPassword = asyncHandler(async(req,res) => {
  
      if(user){
          if(user.emailToken == token){
+
             //get new password in body
-            const newPassword = req.body.password;
-            await UserModel.updateOne({ _id: user._id }, { $set: { password: newPassword } })
+            const passHash = await bcrypt.hash(req.body.password, 10)
+            await UserModel.updateOne({ _id: user._id }, { $set: { password: passHash } })
             res.json({message : "password is insert"})
          }
          else{
