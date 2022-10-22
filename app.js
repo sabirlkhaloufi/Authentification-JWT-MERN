@@ -4,12 +4,16 @@ const app = express()
 //error handller middlware
 const {errorHandler} = require("./Middlewares/errorMiddleware")
 const routeError = require("./Middlewares/routeMiddleware")
+const cookieParser = require('cookie-parser');
 
 // require file connection dataBase MongoDB
 const connectDB = require('./Config/db')
 
 //get function connnection
 connectDB();
+
+//use middlware cookieParser
+app.use(cookieParser());
 
 
 // require routes in folder routes

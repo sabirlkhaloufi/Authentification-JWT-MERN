@@ -3,6 +3,7 @@ require("dotenv").config()
 const asyncHandler = require('express-async-handler')
 const userModel = require("../Models/UserModel")
 
+
 const protect = asyncHandler(async (req, res, next) => {
     let token
 
@@ -16,6 +17,8 @@ const protect = asyncHandler(async (req, res, next) => {
 
             //get user by Id for check token autorisation
             req.user = await userModel.findById(decoded.id).select('-password')
+
+            res.json(decoded)
             
             next()
         } catch (error) {

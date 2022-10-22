@@ -3,6 +3,7 @@ const UserModel = require("../Models/UserModel")
 const RoleModel = require("../Models/RoleModel")
 const jwt = require("jsonwebtoken")
 const asyncHandler = require('express-async-handler');
+const bcrypt = require("bcryptjs")
 const {sendEmailForUser, sendEmailForResetPass} = require('../Utils/sendMail')
 
 
@@ -11,6 +12,7 @@ const {sendEmailForUser, sendEmailForResetPass} = require('../Utils/sendMail')
 // acces  : Public
 const Login =  asyncHandler(async(req,res) => {
 
+    // check is value is empty
      if(!req.body.email || !req.body.password){
         res.status(400)
         throw new Error("please enter email or password")
@@ -21,8 +23,12 @@ const Login =  asyncHandler(async(req,res) => {
 
     //check by email and compaer password with password hashed
     if(user && (await bcrypt.compare(req.body.password,user.password))){
+        const role = await RoleModel.findOne({_id: user.role})
+        //generate token => id , => role
+        const token = generateToken(user._id,role.role)
+
         res.json({
-            token: generateToken(user._id,user.name )
+            token
         })
     }
     else{
@@ -55,11 +61,14 @@ const Register =  asyncHandler(async(req,res) => {
         throw new Error("canot find this role")
     }
 
+    //hash password bcriptJs
+    const passHash = await bcrypt.hash(req.body.password, 10)
+    console.log(passHash);
     try{
         const user =  await UserModel.create({
             name:req.body.name,
             email:req.body.email,
-            password:req.body.password,
+            password:passHash,
             role:findRole._id,
             emailToken:null
         });
@@ -102,7 +111,6 @@ const ForgetPassword =  asyncHandler(async(req,res) => {
     }
 })
 
-
 // method : post
 // url    : api/auth/ResetPassword
 // acces  : Public
@@ -130,10 +138,9 @@ const ResetPassword = asyncHandler(async(req,res) => {
 
 })
 
-
 //generate token for send in email and login
-const generateToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET,{
+const generateToken = (id,role) => {
+    return jwt.sign({id,role}, process.env.JWT_SECRET,{
         expiresIn: '1d'
     })
 }
@@ -144,8 +151,6 @@ const generateTokenReset = (id) => {
         expiresIn: '10m'
     })
 }
-
-
 
 // method  : get
 // url     : api/auth/verify-email
