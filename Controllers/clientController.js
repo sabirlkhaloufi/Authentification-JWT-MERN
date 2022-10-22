@@ -4,8 +4,8 @@ const UserModel = require("../Models/UserModel")
 // url : api/user/client/me
 // acces : private
 const GetClient =  async(req,res) => {
-    const data = await UserModel.findById(req.user.id);
-    res.json(data)
+    
+    res.send("client")
 }
 
 module.exports = {

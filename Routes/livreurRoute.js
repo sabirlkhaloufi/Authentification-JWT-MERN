@@ -3,6 +3,7 @@ const router = express.Router()
 
 const {GetLivreur} = require('../Controllers/livreurController')
 
-router.get('/livreur/me',GetLivreur)
+const {isLivreur} = require('../Middlewares/livreurMiddlware')
+router.get('/livreur/me',isLivreur,GetLivreur)
 
 module.exports = router

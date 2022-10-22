@@ -3,6 +3,7 @@ const router = express.Router()
 
 const {GetManager} = require('../Controllers/managerController')
 
-router.get('/manager/me',GetManager)
+const {isManager} = require('../Middlewares/managerMiddlware')
+router.get('/manager/me',isManager,GetManager)
 
 module.exports = router
