@@ -178,10 +178,22 @@ const verifyEmail = async(req,res) => {
     }
 }
 
+
+// method  : get
+// url     : api/auth/logout
+// acces   : Public
+
+const Logout = async(req,res)=>{
+    res.clearCookie('token');
+    res.send('Cookie cleared');
+}
+
+
 module.exports = {
     Login,
     Register,
     ForgetPassword,
     ResetPassword,
-    verifyEmail
+    verifyEmail,
+    Logout
 }
