@@ -1,7 +1,7 @@
 require("dotenv").config()
 const UserModel = require("../Models/UserModel")
 const RoleModel = require("../Models/RoleModel")
-const jwt = require("jsonwebtoken")
+const {generateToken, generateTokenReset} = require("../Utils/generateToken");
 const asyncHandler = require('express-async-handler');
 const bcrypt = require("bcryptjs")
 const {sendEmailForUser, sendEmailForResetPass} = require('../Utils/sendMail')
@@ -103,7 +103,8 @@ const ForgetPassword =  asyncHandler(async(req,res) => {
 
     if(user){
         user.emailToken = generateTokenReset(user._id);
-        await UserModel.updateOne({_id: user._id }, { $set: { emailToken: user.emailToken } })
+        user.save();
+        // await UserModel.updateOne({_id: user._id }, { $set: { emailToken: user.emailToken } })
         sendEmailForResetPass(req,user,res)
     }
     else{
@@ -139,20 +140,6 @@ const ResetPassword = asyncHandler(async(req,res) => {
 
 })
 
-//generate token for send in email and login
-const generateToken = (id,role) => {
-    return jwt.sign({id,role}, process.env.JWT_SECRET,{
-        expiresIn: '1d'
-    })
-}
-
-// generate token for reset password
-const generateTokenReset = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET,{
-        expiresIn: '10m'
-    })
-}
-
 // method  : get
 // url     : api/auth/verify-email
 // acces   : Public
@@ -182,10 +169,9 @@ const verifyEmail = async(req,res) => {
 // method  : get
 // url     : api/auth/logout
 // acces   : Public
-
 const Logout = async(req,res)=>{
     res.clearCookie('token');
-    res.send('Cookie cleared');
+    res.send('Logout');
 }
 
 

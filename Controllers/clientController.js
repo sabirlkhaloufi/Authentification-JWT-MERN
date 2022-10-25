@@ -5,7 +5,7 @@ const UserModel = require("../Models/UserModel")
 // acces : private
 const GetClient =  async(req,res) => {
     
-    res.send("client")
+    res.send("Bonjour client")
 }
 
 module.exports = {
