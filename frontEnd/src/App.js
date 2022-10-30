@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboard";
 import NewPass from "./pages/NewPass";
 import ForgetPass from "./pages/ForgetPass";
 import Header from "./components/Header";
+import Sidebar from "./components/Sidebar"
+import NotFound from "./pages/NotFound"
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path="/Dashboard" element={<Dashboard/>}/>
           <Route path="/ForgetPass" element={<ForgetPass/>}/>
           <Route path="/NewPass" element={<NewPass/>}/>
+          <Route path="/Sidebar" element={<Sidebar/>}/>
+          <Route path="*" element={<NotFound/>}/>
         </Routes>
       </div>
     </Router>

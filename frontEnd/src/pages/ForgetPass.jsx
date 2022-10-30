@@ -1,6 +1,7 @@
 import React from "react";
 
 function ForgetPass(){
+	
     return(
         <section className="ftco-section">
 		<div className="container">

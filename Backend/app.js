@@ -1,6 +1,7 @@
 require("dotenv").config()
 const express = require("express")
 const app = express()
+const cors = require('cors');
 //error handller middlware
 const {errorHandler} = require("./Middlewares/errorMiddleware")
 const routeError = require("./Middlewares/routeMiddleware")
@@ -9,11 +10,14 @@ const cookieParser = require('cookie-parser');
 // require file connection dataBase MongoDB
 const connectDB = require('./Config/db')
 
+
+
 //get function connnection
 connectDB();
 
 //use middlware cookieParser
 app.use(cookieParser());
+app.use(cors());
 
 
 // require routes in folder routes

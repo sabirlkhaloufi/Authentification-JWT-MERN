@@ -4,6 +4,7 @@ const RoleModel = require("../Models/RoleModel")
 const {generateToken, generateTokenReset} = require("../Utils/generateToken");
 const asyncHandler = require('express-async-handler');
 const bcrypt = require("bcryptjs")
+const jwt = require('jsonwebtoken');
 const {sendEmailForUser, sendEmailForResetPass} = require('../Utils/sendMail')
 
 
@@ -82,6 +83,7 @@ const Register =  asyncHandler(async(req,res) => {
         //sendMail verification arg(dataUser);
         sendEmailForUser(req,user,res);
 
+
     } catch(error){
         throw new Error(error)
     }
@@ -155,7 +157,8 @@ const verifyEmail = async(req,res) => {
     if(user){
         if(user.emailToken == token){
             await UserModel.updateOne({ _id: user._id }, { $set: { isVerified: true } })
-            res.json({message : "email is verify"})
+            
+            res.redirect("http://localhost:3000/Register");
         }
         else{
             res.json({message : "email not verify"})
