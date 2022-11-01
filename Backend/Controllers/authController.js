@@ -157,14 +157,13 @@ const verifyEmail = async(req,res) => {
     if(user){
         if(user.emailToken == token){
             await UserModel.updateOne({ _id: user._id }, { $set: { isVerified: true } })
-            
-            res.redirect("http://localhost:3000/Register");
+            res.json({message : "email is verified"})
         }
         else{
-            res.json({message : "email not verify"})
+            throw new Error("email not verified")
         } 
     }else{
-        res.json({message : "email not verify"})
+        throw new Error("email not verified")
     }
 }
 

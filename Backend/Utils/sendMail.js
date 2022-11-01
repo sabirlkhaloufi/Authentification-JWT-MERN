@@ -24,7 +24,7 @@ const sendEmailForUser = (req,user,res) =>{
         subject: 'codewithid -verify yur email',
         html : `<h2> ${user.name} thanks for register on our site</h2>
                 <h4>Please verify your email to contenue ....</h4>
-                <a href="http://${req.headers.host}/api/auth/verify-email/${user.emailToken}">Verify Your Email</a>`
+                <a href="${process.env.PORT_CLIENT}VerifyEmail/${user.emailToken}">Verify Your Email</a>`
     }
     
     transporter.sendMail(mailOption, function(error, info){
