@@ -54,12 +54,14 @@ const Register =  asyncHandler(async(req,res) => {
     // check if compte exist
     const userExist = await UserModel.findOne({email: req.body.email})
     if(userExist){
-        throw new Error("user is exist")
+        res.status(400)
+        throw new Error('user already exists')
     }
     
     //check role is exist and get RoleId
     const findRole = await RoleModel.findOne({role : req.body.role})
     if(!findRole){
+        res.status(400)
         throw new Error("canot find this role")
     }
 
@@ -85,6 +87,7 @@ const Register =  asyncHandler(async(req,res) => {
 
 
     } catch(error){
+        res.status(400)
         throw new Error(error)
     }
 
@@ -97,6 +100,7 @@ const ForgetPassword =  asyncHandler(async(req,res) => {
 
     //check for empty value
     if(!req.body.email){
+        res.status(400)
         throw new Error("please enter your email")
     }
 
@@ -110,6 +114,7 @@ const ForgetPassword =  asyncHandler(async(req,res) => {
         sendEmailForResetPass(req,user,res)
     }
     else{
+        res.status(400)
         throw new Error("this email not exist")  
     }
 })
@@ -134,10 +139,12 @@ const ResetPassword = asyncHandler(async(req,res) => {
             res.json({message : "password is insert"})
          }
          else{
-             res.json({message : "password not reset verify"})
+            res.status(400)
+             throw new Error("password not reset verify")
          } 
      }else{
-         res.json({message : "password not reset verify"})
+        res.status(400)
+        throw new Error("password not reset verify")
      }
 
 })
@@ -160,9 +167,11 @@ const verifyEmail = async(req,res) => {
             res.json({message : "email is verified"})
         }
         else{
+            res.status(400)
             throw new Error("email not verified")
         } 
     }else{
+        res.status(400)
         throw new Error("email not verified")
     }
 }

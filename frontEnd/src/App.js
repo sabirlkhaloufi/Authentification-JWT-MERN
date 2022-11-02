@@ -7,8 +7,9 @@ import Dashboard from "./components/Dashboard";
 import NewPass from "./components/NewPass";
 import ForgetPass from "./components/ForgetPass";
 import Header from "./components/partials/Header";
-import Sidebar from "./components/partials/Sidebar"
+import Profile from "./components/Dashboard/Profile";
 import VerifyEmail from "./components/partials/VerifyEmail";
+import PrivateRoutes from "./Utils/PrivateRoutes"
 
 function App() {
 
@@ -19,14 +20,17 @@ function App() {
     
     <Router>
       <div>
+
       <Header/>
         <Routes>
+          <Route element={<PrivateRoutes/>}>
+              <Route path="/Dashboard" element={<Dashboard/>}/>
+              <Route path="/Profile" element={<Profile/>}/>
+          </Route>
+
           <Route path="/" element={<Login/>}/>
-          <Route path="/Register" element={<Register/>}/>
-          <Route path="/Dashboard" element={<Dashboard/>}/>
-          <Route path="/ForgetPass" element={<ForgetPass/>}/>
+          <Route path="/Register" element={<Register/>}/>          <Route path="/ForgetPass" element={<ForgetPass/>}/>
           <Route path="/NewPass" element={<NewPass/>}/>
-          <Route path="/Sidebar" element={<Sidebar/>}/>
           <Route path="/VerifyEmail/:token" element={<VerifyEmail/>}/>
           <Route path="*" element={<Login/>}/>
         </Routes>

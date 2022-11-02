@@ -2,6 +2,8 @@ import React from "react";
 import {useState} from 'react';
 import axios from 'axios';
 import Swal from "sweetalert2";
+import Alert from "../Utils/Alert";
+import { Link } from "react-router-dom";
 // import Spinner from 'react-bootstrap/Spinner';
 
 function Register(){
@@ -11,6 +13,7 @@ function Register(){
 	});
 	
     const [formData, setFormData] = useState({})
+	const [error, setError] = useState(false)
 
 	const onChange = (e)=>{
 		setFormData((prevState) =>({
@@ -20,10 +23,12 @@ function Register(){
 	}
 
 const sendData = async(e) =>{
+	setError(false)
 	e.preventDefault();
 
 	api.post("auth/register",formData)
 	  .then( (response) => {
+		
 		console.log(response);
 		Swal.fire({
 			title: "Success",
@@ -32,7 +37,8 @@ const sendData = async(e) =>{
 		  });
 	  })
 	  .catch((error)=> {
-		console.log(error);
+		setError(error.response.data.message)
+		console.log(error.response.data.message);
 	  });  
 }
 
@@ -95,6 +101,9 @@ const sendData = async(e) =>{
                 <h4 className="font-weight-bolder">Sign In</h4>
               </div>
               <div className="card-body">
+
+				<Alert error={error} />
+
                 <form role="form" onSubmit={sendData}>
                   <div className="mb-2">
 				  <input type="email" className="form-control form-control-lg" placeholder="Email" name="email" onChange={onChange} required/>
@@ -122,11 +131,12 @@ const sendData = async(e) =>{
                   <div className="text-center">
                     <button type="submit" className="btn btn-lg btn-primary btn-lg w-100 mt-3 mb-0">Sign in</button>
                   </div>
+				  
                 </form>
               </div>
               <div className="card-footer text-center pt-0 px-lg-2 px-1">
                 <p className="mb-4 text-sm mx-auto">have an account?
-                  <a href="javascript:;" className="text-primary text-gradient font-weight-bold">Login</a>
+                  <Link to="/" className="text-primary text-gradient font-weight-bold">Login</Link>
                 </p>
               </div>
             </div>

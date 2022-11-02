@@ -23,7 +23,7 @@ function VerifyEmail() {
             icon: "success",
           });
     }).catch((error)=>{
-        console.log(error);
+        console.log(error.response.data);
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
