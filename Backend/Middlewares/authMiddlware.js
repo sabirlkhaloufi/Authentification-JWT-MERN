@@ -5,12 +5,13 @@ const userModel = require("../Models/UserModel")
 
 
 const protect = asyncHandler(async (req, res, next) => {
-    let token
+    let token;
 
     if(req.cookies.token){
         try {
             //get token from header
             token = req.cookies.token;
+            console.log(token);
 
             //verify token
             const decoded = jwt.verify(token, process.env.JWT_SECRET)

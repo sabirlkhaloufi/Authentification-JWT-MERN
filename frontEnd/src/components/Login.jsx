@@ -2,12 +2,11 @@ import React from "react";
 import axios from 'axios'
 import { useState } from "react";
 import Alert from "../Utils/Alert";
-import {Link, useNavigate } from "react-router-dom";
+import {Link, Navigate, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import IsAuth from "../Utils/PrivateRoutes";
 
 function Login(){
-  // const Navigate = useNavigate();
+  const Navigate = useNavigate();
 	const [formData, setFormData] = useState({})
   const [error, setError] = useState(false)
   const [cookies, setCookie] = useCookies();
@@ -25,7 +24,7 @@ const sendData = async(e) =>{
 
 	axios.post("http://localhost:4000/api/auth/login",formData,{withCredentials:true})
 	  .then( (response) => {
-
+      Navigate("/profile");
 	  })
 	  .catch(function (error) {
       setError(error.response.data.message)
