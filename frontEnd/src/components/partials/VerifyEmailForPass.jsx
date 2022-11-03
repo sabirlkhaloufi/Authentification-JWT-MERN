@@ -1,40 +1,30 @@
-import React from 'react'
-import {useParams} from 'react-router-dom';
+import React ,{useState} from 'react'
+import {useParams,Navigate} from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
 function VerifyEmail() {
 
-    // const [] = useState(false);
+    const [isVerified,setisVerified] = useState(false);
     const api = axios.create({
 		baseURL: "http://localhost:4000/api/"
 	});
 
     const { token } = useParams();
-    console.log(token);
 
     
     api.get(`auth/verify-email/${token}`)
     .then((response)=>{
         console.log(response.data);
-        Swal.fire({
-            title: "Success",
-            text: "Email Is verified Successfuly",
-            icon: "success",
-          });
+        setisVerified(true);
     }).catch((error)=>{
-        console.log(error.response.data);
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Email Not Verified!',
-          footer: '<a href="">Send Another Verification</a>'
-          });
+        console.log(error);
     })
 
 
   return (
     <div>
+      {isVerified &&  <Navigate to={'/NewPass/'+token} replace={true} />}
     </div>
   )
 }

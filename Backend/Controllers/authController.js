@@ -156,7 +156,8 @@ const verifyEmail = async(req,res) => {
 
     //get token in route 
     const token = req.params.token;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
     //get user by Id for compare tokenEmail with email in database
     const user = await UserModel.findById(decoded.id).select('emailToken')
@@ -173,6 +174,10 @@ const verifyEmail = async(req,res) => {
     }else{
         res.status(400)
         throw new Error("email not verified")
+    }
+    } catch (error) {
+        res.status(400)
+        throw new Error(error)
     }
 }
 

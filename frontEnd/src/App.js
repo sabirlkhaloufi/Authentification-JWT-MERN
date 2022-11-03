@@ -10,6 +10,7 @@ import Header from "./components/partials/Header";
 import Profile from "./components/Dashboard/Profile";
 import VerifyEmail from "./components/partials/VerifyEmail";
 import PrivateRoutes from "./Utils/PrivateRoutes"
+import VerifyEmailForPass from "./components/partials/VerifyEmailForPass"
 
 function App() {
 
@@ -30,8 +31,10 @@ function App() {
 
           <Route path="/" element={<Login/>}/>
           <Route path="/Register" element={<Register/>}/>          <Route path="/ForgetPass" element={<ForgetPass/>}/>
-          <Route path="/NewPass" element={<NewPass/>}/>
+          <Route path="/NewPass/:token" element={<NewPass/>}/>
           <Route path="/VerifyEmail/:token" element={<VerifyEmail/>}/>
+          <Route path="/VerifyEmailForPass/:token" element={<VerifyEmailForPass/>}/>
+
           <Route path="*" element={<Login/>}/>
         </Routes>
       </div>

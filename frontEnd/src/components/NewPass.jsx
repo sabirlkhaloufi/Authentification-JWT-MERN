@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import axios from "axios";
 import Swal from 'sweetalert2';
+import { useParams } from "react-router-dom";
 
 function NewPass(){
 
@@ -8,6 +9,8 @@ function NewPass(){
 		baseURL: "http://localhost:4000/api/"
 	});
 	
+  const {token} = useParams(); 
+
     const [formData, setFormData] = useState({})
 
 	const onChange = (e)=>{
@@ -20,7 +23,7 @@ function NewPass(){
 const sendData = async(e) =>{
 	e.preventDefault();
 
-	api.post("auth/register",formData)
+	api.post(`auth/resetpassword/${token}`,formData)
 	  .then( (response) => {
 		console.log(response);
 		Swal.fire({

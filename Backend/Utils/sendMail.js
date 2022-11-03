@@ -47,7 +47,7 @@ mailOption =  {
     subject: 'reset your password',
     html : `<h2> ${user.name}</h2>
             <h4>Click for lien for reset your password</h4>
-            <a href="http://${req.headers.host}/api/auth/resetpassword/${user.emailToken}">Reset Password</a>`
+            <a href="${process.env.PORT_CLIENT}VerifyEmailForPass/${user.emailToken}">Reset Password</a>`
 }
 
 transporter.sendMail(mailOption, function(error, info){

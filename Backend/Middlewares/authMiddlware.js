@@ -11,7 +11,6 @@ const protect = asyncHandler(async (req, res, next) => {
         try {
             //get token from header
             token = req.cookies.token;
-            console.log(token);
 
             //verify token
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
