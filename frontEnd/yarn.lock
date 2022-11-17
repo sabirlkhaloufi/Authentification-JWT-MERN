@@ -6157,6 +6157,11 @@
     "array-includes" "^3.1.5"
     "object.assign" "^4.1.3"
 
+"jwt-decode@^3.1.2":
+  "integrity" "sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A=="
+  "resolved" "https://registry.npmjs.org/jwt-decode/-/jwt-decode-3.1.2.tgz"
+  "version" "3.1.2"
+
 "kind-of@^6.0.2":
   "integrity" "sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw=="
   "resolved" "https://registry.npmjs.org/kind-of/-/kind-of-6.0.3.tgz"
@@ -7680,6 +7685,13 @@
   "resolved" "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.11.tgz"
   "version" "6.0.11"
 
+"react-form-input-validation@^2.1.0":
+  "integrity" "sha512-XQUoQd540ykxUkEuoakJXo55IXMzgBgLFsT81CjnQ9LTufgGibOyKyJ5ByPdfPotpRwHbdxURMU5b9rq+8Vj4Q=="
+  "resolved" "https://registry.npmjs.org/react-form-input-validation/-/react-form-input-validation-2.1.0.tgz"
+  "version" "2.1.0"
+  dependencies:
+    "validatorjs" "^3.22.1"
+
 "react-is@^16.13.1":
   "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
@@ -7794,7 +7806,7 @@
   "resolved" "https://registry.npmjs.org/react-spinners/-/react-spinners-0.13.6.tgz"
   "version" "0.13.6"
 
-"react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^18.0.0", "react@^18.2.0", "react@>= 16", "react@>= 16.3.0", "react@>= 16.8.0", "react@>=16.8":
+"react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^18.0.0", "react@^18.2.0", "react@>= 16", "react@>= 16.3.0", "react@>= 16.8.0", "react@>=16.8", "react@>=16.9.0":
   "integrity" "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="
   "resolved" "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   "version" "18.2.0"
@@ -9067,6 +9079,11 @@
     "@types/istanbul-lib-coverage" "^2.0.1"
     "convert-source-map" "^1.6.0"
     "source-map" "^0.7.3"
+
+"validatorjs@^3.22.1":
+  "integrity" "sha512-451KiCt/3E8qV/8fOUdO0YkA8zUdQBNVxubg9jvgEB+JAg9IlRKrClzwq2ir2ndj7TWmPYQ7bXFb4BxcyX2iWw=="
+  "resolved" "https://registry.npmjs.org/validatorjs/-/validatorjs-3.22.1.tgz"
+  "version" "3.22.1"
 
 "vary@~1.1.2":
   "integrity" "sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg=="

@@ -2,14 +2,14 @@ import React from "react";
 import axios from 'axios'
 import { useState } from "react";
 import Alert from "../Utils/Alert";
-import {Link, Navigate, useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
+import {Link, useNavigate } from "react-router-dom";
+import CardR from './partials/CardR';
+
 
 function Login(){
   const Navigate = useNavigate();
 	const [formData, setFormData] = useState({})
   const [error, setError] = useState(false)
-  const [cookies, setCookie] = useCookies();
 
 	const onChange = (e)=>{
 		setFormData((prevState) =>({
@@ -24,7 +24,7 @@ const sendData = async(e) =>{
 
 	axios.post("http://localhost:4000/api/auth/login",formData,{withCredentials:true})
 	  .then( (response) => {
-      Navigate("/profile");
+      window.location = "/profile"
 	  })
 	  .catch(function (error) {
       setError(error.response.data.message)
@@ -78,13 +78,7 @@ const sendData = async(e) =>{
               </div>
             </div>
           </div>
-          <div className="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
-            <div className="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style={{backgroundImage: 'url("https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg")', backgroundSize: 'cover'}}>
-              <span className="mask bg-gradient-primary opacity-6" />
-              <h4 className="mt-5 text-white font-weight-bolder position-relative">"Attention is the new currency"</h4>
-              <p className="text-white position-relative">The more effortless the writing looks, the more effort the writer actually put into the process.</p>
-            </div>
-          </div>
+          <CardR/>
         </div>
       </div>
     </div>

@@ -1,9 +1,10 @@
 import React from 'react'
-import {useParams} from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2'
 
 function VerifyEmail() {
+  const Navigate = useNavigate();
 
     // const [] = useState(false);
     const api = axios.create({
@@ -21,7 +22,13 @@ function VerifyEmail() {
             title: "Success",
             text: "Email Is verified Successfuly",
             icon: "success",
-          });
+        });
+
+        Navigate("/login")
+
+
+
+
     }).catch((error)=>{
         console.log(error.response.data);
         Swal.fire({

@@ -1,8 +1,13 @@
+const RoleModel = require("../Models/RoleModel")
+
 // method : get
 // url : api/user/manager/me
 // acces : private
 const GetManager =  async(req,res) => {
-    res.status(200).json('Bonjour manager')
+    let user = req.user;
+    user.role = await RoleModel.findOne({_id: user.role[0]})
+
+    res.json(user)
 }
 
 module.exports = {

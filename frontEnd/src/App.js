@@ -23,17 +23,24 @@ function App() {
       <div>
 
       <Header/>
+
         <Routes>
           <Route element={<PrivateRoutes/>}>
               <Route path="/Dashboard" element={<Dashboard/>}/>
               <Route path="/Profile" element={<Profile/>}/>
           </Route>
 
-          <Route path="/" element={<Login/>}/>
-          <Route path="/Register" element={<Register/>}/>          <Route path="/ForgetPass" element={<ForgetPass/>}/>
-          <Route path="/NewPass/:token" element={<NewPass/>}/>
-          <Route path="/VerifyEmail/:token" element={<VerifyEmail/>}/>
-          <Route path="/VerifyEmailForPass/:token" element={<VerifyEmailForPass/>}/>
+
+         
+            <Route path="/" element={<Login/>}/>
+            <Route path="/Register" element={<Register/>}/>
+            <Route path="/ForgetPass" element={<ForgetPass/>}/>
+            <Route path="/NewPass/:token" element={<NewPass/>}/>
+            <Route path="/VerifyEmail/:token" element={<VerifyEmail/>}/>
+            <Route path="/VerifyEmailForPass/:token" element={<VerifyEmailForPass/>}/>
+          
+
+          
 
           <Route path="*" element={<Login/>}/>
         </Routes>

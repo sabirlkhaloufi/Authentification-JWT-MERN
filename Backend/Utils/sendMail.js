@@ -31,9 +31,6 @@ const sendEmailForUser = (req,user,res) =>{
         if(error){
             throw new Error(error)
         }
-        else{
-            res.json({message : "verification email is send to your email account"})
-        }
     })
     
 }

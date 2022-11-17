@@ -2,6 +2,7 @@ import React ,{useState} from 'react'
 import {useParams,Navigate} from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2'
+import Api from '../../Utils/Api';
 
 function VerifyEmail() {
 
@@ -17,6 +18,16 @@ function VerifyEmail() {
     .then((response)=>{
         console.log(response.data);
         setisVerified(true);
+
+        console.log(Api);
+        Swal.fire({
+            title: "Success",
+            text: "Email Is verified Successfuly",
+            icon: "success",
+        });
+
+        Navigate("/login")
+
     }).catch((error)=>{
         console.log(error);
     })
@@ -25,6 +36,7 @@ function VerifyEmail() {
   return (
     <div>
       {isVerified &&  <Navigate to={'/NewPass/'+token} replace={true} />}
+      Email not validate send another
     </div>
   )
 }

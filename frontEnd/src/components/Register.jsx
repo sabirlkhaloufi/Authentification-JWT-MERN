@@ -4,9 +4,14 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 import Alert from "../Utils/Alert";
 import { Link } from "react-router-dom";
-// import Spinner from 'react-bootstrap/Spinner';
+import CardR from './partials/CardR';
+import {useNavigate } from "react-router-dom";
+
+
 
 function Register(){
+
+	const Navigate = useNavigate();
 
 	const api = axios.create({
 		baseURL: "http://localhost:4000/api/"
@@ -25,16 +30,19 @@ function Register(){
 const sendData = async(e) =>{
 	setError(false)
 	e.preventDefault();
-
+	
 	api.post("auth/register",formData)
 	  .then( (response) => {
 		
 		console.log(response);
 		Swal.fire({
 			title: "Success",
-			text: "Register success , please verify your acount",
+			text: `Register success , please verify your acount ${response.data.email}`,
 			icon: "success",
 		  });
+
+		  Navigate("/login")
+		  
 	  })
 	  .catch((error)=> {
 		setError(error.response.data.message)
@@ -44,51 +52,6 @@ const sendData = async(e) =>{
 
 
     return(
-    //     <section className="ftco-section">
-
-	// 	<div className="container">
-	// 		<div className="row justify-content-center">
-	// 			<div className="col-md-6 col-lg-6">
-	// 				<div className="login-wrap p-4 p-md-5">
-	// 	      	<div className="icon d-flex align-items-center justify-content-center">
-	// 	      		<span className="fa fa-user-o"></span>
-	// 	      	</div>
-	// 	      	<h3 className="text-center mb-4">Create New Account</h3>
-	// 					<form  className="login-form" onSubmit={sendData}>
-	// 	      		<div className="form-group">
-	// 	      			<input type="email" className="form-control rounded-left" placeholder="Email" name="email" onChange={onChange} required/>
-	// 	      		</div>
-
-	// 				  <div className="form-group">
-	// 	      			<input type="text" className="form-control rounded-left" placeholder="Name" name="name" onChange={onChange} required/>
-	// 	      		</div>
-
-    //             <div className="form-group d-flex">
-    //             <select name="role" id="" className="form-control rounded-left" onChange={onChange} >
-    //             <option value="select role" selected>select Role</option>
-    //                 <option value="client">client</option>
-    //                 <option value="livreur">livreur</option>
-    //             </select>
-    //             </div>
-          
-
-    //             <div className="form-group d-flex">
-	//               <input type="password" className="form-control rounded-left" placeholder="Password" name="password" onChange={onChange} required/>
-	//             </div>
-
-    //             <div className="form-group d-flex">
-	//               <input type="password" className="form-control rounded-left" placeholder="Password" name="Cpassword" onChange={onChange} required/>
-	//             </div>
-	            
-	//             <div className="form-group">
-	//             	<button type="submit" className="btn btn-primary rounded submit p-3 px-5">Register</button>
-	//             </div>
-	//           </form>
-	//         </div>
-	// 			</div>
-	// 		</div>
-	// 	</div>
-	// </section>
 
 <main className="main-content  mt-0">
   <section>
@@ -141,13 +104,7 @@ const sendData = async(e) =>{
               </div>
             </div>
           </div>
-          <div className="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
-            <div className="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style={{backgroundImage: 'url("https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg")', backgroundSize: 'cover'}}>
-              <span className="mask bg-gradient-primary opacity-6" />
-              <h4 className="mt-5 text-white font-weight-bolder position-relative">"Attention is the new currency"</h4>
-              <p className="text-white position-relative">The more effortless the writing looks, the more effort the writer actually put into the process.</p>
-            </div>
-          </div>
+          <CardR/>
         </div>
       </div>
     </div>

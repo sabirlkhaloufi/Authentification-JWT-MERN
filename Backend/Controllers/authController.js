@@ -25,6 +25,7 @@ const Login =  asyncHandler(async(req,res) => {
     //check by email and compaer password with password hashed
     if(user && (await bcrypt.compare(req.body.password,user.password))){
         const role = await RoleModel.findOne({_id: user.role})
+        
         //generate token => id , => role
         const token = generateToken(user._id,role.role)
 
@@ -82,8 +83,12 @@ const Register =  asyncHandler(async(req,res) => {
         //insert token generate in database
         await UserModel.updateOne({ _id: user._id }, { $set: { emailToken: user.emailToken } })
 
+        
+
         //sendMail verification arg(dataUser);
         sendEmailForUser(req,user,res);
+
+        res.json(user)
 
 
     } catch(error){
@@ -149,10 +154,11 @@ const ResetPassword = asyncHandler(async(req,res) => {
 
 })
 
+
 // method  : get
 // url     : api/auth/verify-email
 // acces   : Public
-const verifyEmail = async(req,res) => {
+const verifyEmail = asyncHandler(async(req,res) => {
 
     //get token in route 
     const token = req.params.token;
@@ -179,7 +185,7 @@ const verifyEmail = async(req,res) => {
         res.status(400)
         throw new Error(error)
     }
-}
+})
 
 
 // method  : get
