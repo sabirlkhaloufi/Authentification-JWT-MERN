@@ -28,7 +28,6 @@ const managerRouter = require("./Routes/managerRoute")
 const livreurRouter = require("./Routes/livreurRoute")
 
 
-
 app.use(express.json())
 
 app.use("/api/user",clientRouter)
@@ -37,12 +36,16 @@ app.use("/api/user",livreurRouter)
 app.use("/api/auth",UserRouter)
 
 app.use('*',routeError)
+
+
+
+
 app.use(errorHandler)
-
-
 
 
 port = process.env.PORT || 5000;
 
 // start server
 app.listen(port, ()=> console.log("Server Started: "+port))
+
+module.exports = app;

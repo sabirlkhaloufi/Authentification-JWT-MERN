@@ -30,7 +30,7 @@ const Login =  asyncHandler(async(req,res) => {
         const token = generateToken(user._id,role.role)
 
         res.cookie("token",token); 
-        res.json({
+        res.status(200).json({
             token
         })
     }
