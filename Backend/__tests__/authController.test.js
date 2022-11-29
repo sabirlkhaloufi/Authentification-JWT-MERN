@@ -1,35 +1,49 @@
 const request = require('supertest')
 const app = require('../app.js')
 
+const api = "/api/auth/register";
 
-describe('login user', () => {
-  it('should login', async () => {
-    const res = await request(app)
-      .post('/api/auth/login')
-      .send({
-        email: "khalid@gmail.com",
-        password: 'khalid',
-        
-      })
-
-    expect(res.status).toEqual(200)
-    // expect(res.body).toHaveProperty('post')
-  })
-})
-
-
-describe('register user', () => {
-    it('should register', async () => {
+//test Register Method
+//POST: /api/auth/register
+describe('register', () => {
+    it('register by user alredy exist', async () => {
       const res = await request(app)
-        .post('/api/auth/register')
+        .post(api)
         .send({
-          name: "khalid",  
-          email: "khalid@gmail.com",
-          password: 'khalid',
+          name: "sabir",  
+          email: "sabirkhaloufi@gmail.com",
+          password: 'sabir',
           role: "client"
         })
   
       expect(res.status).toEqual(400)
-      // expect(res.body).toHaveProperty('post')
+    })
+
+
+    it('register by user not exist', async () => {
+      const res = await request(app)
+        .post(api)
+        .send({
+          name: "sabir",  
+          email: "sabihhr@gmail.com",
+          password: 'sabir',
+          role: "client"
+        })
+  
+      expect(res.status).toEqual(200)
+    })
+
+
+    it('send data null', async () => {
+      const res = await request(app)
+        .post(api)
+        .send({
+          name: "",  
+          email: "",
+          password: '',
+          role: ""
+        })
+  
+      expect(res.status).toEqual(400)
     })
   })

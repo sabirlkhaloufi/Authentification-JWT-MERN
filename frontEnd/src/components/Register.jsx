@@ -53,7 +53,7 @@ const sendData = async(e) =>{
 
     return(
 
-<main className="main-content  mt-0">
+<main className="main-content  mt-0" data-testid='Register'>
   <section>
     <div className="page-header min-vh-100">
       <div className="container">
@@ -67,16 +67,16 @@ const sendData = async(e) =>{
 
 				<Alert error={error} />
 
-                <form role="form" onSubmit={sendData}>
+                <form role="form" onSubmit={sendData} data-testid="submit">
                   <div className="mb-2">
-				  <input type="email" className="form-control form-control-lg" placeholder="Email" name="email" onChange={onChange} required/>
+				  <input data-testid="email" type="email" className="form-control form-control-lg email" placeholder="Email" name="email" onChange={onChange} required/>
                   </div>
                   <div className="mb-2">
-				  <input type="text" className="form-control form-control-lg" placeholder="Name" name="name" onChange={onChange} required/>
+				  <input data-testid="name" type="text" className="form-control form-control-lg" placeholder="Name" name="name" onChange={onChange} required/>
                   </div>
 
 				  <div className="mb-2 w-100">
-					<select name="role" id="" className="form-control form-control-lg" onChange={onChange} >
+					<select data-testid="role" name="role" id="" className="form-control form-control-lg" onChange={onChange} >
 						<option value="select role" selected>select Role</option>
 						<option value="client">client</option>
 						<option value="livreur">livreur</option>
@@ -84,7 +84,7 @@ const sendData = async(e) =>{
                   </div>
 
 				  <div className="mb-2">
-				  <input type="password" className="form-control form-control-lg" placeholder="Password" name="password" onChange={onChange} required/>
+				  <input data-testid="password" type="password" className="form-control form-control-lg" placeholder="Password" name="password" onChange={onChange} required/>
                   </div>
 
 				  <div className="mb-2">
@@ -92,7 +92,7 @@ const sendData = async(e) =>{
                   </div>
                   
                   <div className="text-center">
-                    <button type="submit" className="btn btn-lg btn-primary btn-lg w-100 mt-3 mb-0">Sign in</button>
+                    <button type="submit" data-testid="btn" className="btn btn-lg btn-primary btn-lg w-100 mt-3 mb-0">Sign in</button>
                   </div>
 				  
                 </form>
