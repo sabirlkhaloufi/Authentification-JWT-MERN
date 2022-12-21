@@ -6,13 +6,12 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken');
 const {sendEmailForUser, sendEmailForResetPass} = require('../Utils/sendMail')
-
+""
 
 // method : post
 // url    : api/auth/login
 // acces  : Public
 const Login =  asyncHandler(async(req,res) => {
-
     // check is value is empty
      if(!req.body.email || !req.body.password){
         res.status(400)

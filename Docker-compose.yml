@@ -9,7 +9,7 @@ services:
     networks:
       - livraison-marhaba-net
   frontend:
-    build: ./frontend
+    build: ./frontEnd
     ports:
       - "3000:3000"
     volumes:
