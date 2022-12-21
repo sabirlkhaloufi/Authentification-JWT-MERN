@@ -13,5 +13,4 @@ jobs:
 
     steps:
     - name: test function backend
-      run: cd Backend
-      run: npm test
+      run: cd Backend/ && npm test
