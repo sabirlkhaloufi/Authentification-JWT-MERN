@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: test
 
 on:
   push:
@@ -8,10 +8,10 @@ on:
 
 jobs:
 
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Build the Docker image
-      run: docker build ./frontEnd -t frontend
+    - name: test function backend
+      run: cd Backend
+      run: npm test
