@@ -6,18 +6,18 @@ const api = "/api/auth/register";
 //test Register Method
 //POST: /api/auth/register
 describe('register', () => {
-    it('register by user alredy exist', async () => {
-      const res = await request(app)
-        .post(api)
-        .send({
-          name: "sabir",  
-          email: "sabirkhaloufi@gmail.com",
-          password: 'sabir',
-          role: "client"
-        })
+    // it('register by user alredy exist', async () => {
+    //   const res = await request(app)
+    //     .post(api)
+    //     .send({
+    //       name: "sabir",  
+    //       email: "sabirkhaloufi@gmail.com",
+    //       password: 'sabir',
+    //       role: "client"
+    //     })
   
-      expect(res.status).toEqual(400)
-    })
+    //   expect(res.status).toEqual(400)
+    // })
 
 
     it('register by user not exist', async () => {
@@ -25,7 +25,7 @@ describe('register', () => {
         .post(api)
         .send({
           name: "sabir",  
-          email: "sabihhr@gmail.com",
+          email: "sabihhdr@gmail.com",
           password: 'sabir',
           role: "client"
         })
