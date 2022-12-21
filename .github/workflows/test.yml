@@ -6,11 +6,18 @@ on:
   pull_request:
     branches: [ "main" ]
 
+
 jobs:
 
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: test function backend
-      run: cd Backend/ && npm test
+      - uses: actions/checkout@v3
+
+      - name: install jest
+        run: cd Backend/ && npm i jest
+        
+      - name: run test
+        run: npm test
+
